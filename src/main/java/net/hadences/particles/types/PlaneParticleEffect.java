@@ -4,6 +4,7 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.hadences.Specter;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
@@ -68,6 +69,8 @@ public class PlaneParticleEffect implements ParticleEffect {
             String behaviorIdentifier = packetByteBuf.readString();
             int targetEntityIdentifier = packetByteBuf.readVarInt();
 
+            Specter.LOGGER.info("Client packet size: " + packetByteBuf.readerIndex());
+
             return new PlaneParticleEffect(yaw, pitch, roll, scale, isStatic, gravityStrength, maxAge, color, targetColor, repeat, renderTypeOrdinal, behaviorIdentifier, targetEntityIdentifier);
         }
     };
@@ -122,7 +125,9 @@ public class PlaneParticleEffect implements ParticleEffect {
         buf.writeVarInt(this.renderTypeOrdinal);
 
         buf.writeString(behaviorIdentifier);
-        buf.writeInt(targetEntityIdentifier);
+        buf.writeVarInt(targetEntityIdentifier);
+
+        Specter.LOGGER.info("Server packet size: " + buf.writerIndex());
     }
 
     public String asString() {

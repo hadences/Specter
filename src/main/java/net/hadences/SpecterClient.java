@@ -14,6 +14,6 @@ public class SpecterClient implements ClientModInitializer {
     private void registerParticleFactories(){
         Specter.LOGGER.info("registering particle factories!");
 
-        ParticleFactoryRegistry.getInstance().register(SpecterParticleTypes.PLANE, spriteProvider -> new PlaneParticle.Factory(spriteProvider));
+        ParticleFactoryRegistry.getInstance().register(SpecterParticleTypes.PLANE, PlaneParticle.Factory::new);
     }
 }
