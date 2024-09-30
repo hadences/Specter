@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "specter",
+	"version": "${version}",
+	"name": "Specter",
+	"description": "Custom Render Library for Minecraft Fabric!",
+	"authors": [
+		"jaesu (hadences)"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "AGPL-3.0",
+	"icon": "assets/specter/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.hadences.Specter"
+		],
+		"client": [
+			"net.hadences.SpecterClient"
+		]
+	},
+	"mixins": [
+		"specter.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.5",
+		"minecraft": "~1.20.4",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
