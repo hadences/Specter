@@ -13,6 +13,7 @@ import java.util.Locale;
 
 public class PlaneParticleEffect implements ParticleEffect {
 
+
     // Define the Codec for serialization and deserialization
     public static final Codec<PlaneParticleEffect> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
             Codec.FLOAT.fieldOf("yaw").forGetter(PlaneParticleEffect::getYaw),
@@ -25,7 +26,10 @@ public class PlaneParticleEffect implements ParticleEffect {
             Codec.INT.fieldOf("color").forGetter(PlaneParticleEffect::getColor),
             Codec.INT.fieldOf("targetColor").forGetter(PlaneParticleEffect::getTargetColor),
             Codec.BOOL.fieldOf("repeat").forGetter(PlaneParticleEffect::isRepeat),
-            Codec.INT.fieldOf("renderType").forGetter(PlaneParticleEffect::getRenderTypeOrdinal)
+            Codec.INT.fieldOf("renderType").forGetter(PlaneParticleEffect::getRenderTypeOrdinal),
+            Codec.STRING.fieldOf("behaviorIdentifier").forGetter(PlaneParticleEffect::getBehaviorIdentifier),
+            Codec.INT.fieldOf("targetEntityIdentifier").forGetter(PlaneParticleEffect::getTargetEntityIdentifier)
+
     ).apply(instance, PlaneParticleEffect::new));
 
     @SuppressWarnings("deprecation")
@@ -43,8 +47,10 @@ public class PlaneParticleEffect implements ParticleEffect {
             int targetColor = stringReader.readInt();
             boolean repeat = stringReader.readBoolean();
             int renderTypeOrdinal = stringReader.readInt();
+            String behaviorIdentifier = stringReader.readString();
+            int targetEntityIdentifier = stringReader.readInt();
 
-            return new PlaneParticleEffect(yaw, pitch, roll, scale, isStatic, gravityStrength, maxAge, color, targetColor, repeat, renderTypeOrdinal);
+            return new PlaneParticleEffect(yaw, pitch, roll, scale, isStatic, gravityStrength, maxAge, color, targetColor, repeat, renderTypeOrdinal, behaviorIdentifier, targetEntityIdentifier);
         }
 
         public PlaneParticleEffect read(ParticleType<PlaneParticleEffect> particleType, PacketByteBuf packetByteBuf) {
@@ -59,8 +65,10 @@ public class PlaneParticleEffect implements ParticleEffect {
             int targetColor = packetByteBuf.readVarInt();
             boolean repeat = packetByteBuf.readBoolean();
             int renderTypeOrdinal = packetByteBuf.readVarInt();
+            String behaviorIdentifier = packetByteBuf.readString();
+            int targetEntityIdentifier = packetByteBuf.readVarInt();
 
-            return new PlaneParticleEffect(yaw, pitch, roll, scale, isStatic, gravityStrength, maxAge, color, targetColor, repeat, renderTypeOrdinal);
+            return new PlaneParticleEffect(yaw, pitch, roll, scale, isStatic, gravityStrength, maxAge, color, targetColor, repeat, renderTypeOrdinal, behaviorIdentifier, targetEntityIdentifier);
         }
     };
 
@@ -76,9 +84,14 @@ public class PlaneParticleEffect implements ParticleEffect {
     private final int targetColor;
     private final boolean repeat;
     private final int renderTypeOrdinal;
+    private final String behaviorIdentifier;
+    private final int targetEntityIdentifier;
 
     // Constructor
-    public PlaneParticleEffect(float yaw, float pitch, float roll, float scale, boolean isStatic, float gravityStrength, int maxAge, int color, int targetColor, boolean repeat, int renderTypeOrdinal) {
+    public PlaneParticleEffect(float yaw, float pitch, float roll,
+                               float scale, boolean isStatic, float gravityStrength,
+                               int maxAge, int color, int targetColor,
+                               boolean repeat, int renderTypeOrdinal, String behaviorIdentifier, int targetEntityIdentifier) {
         this.yaw = yaw;
         this.pitch = pitch;
         this.roll = roll;
@@ -90,6 +103,8 @@ public class PlaneParticleEffect implements ParticleEffect {
         this.targetColor = targetColor;
         this.repeat = repeat;
         this.renderTypeOrdinal = renderTypeOrdinal;
+        this.behaviorIdentifier = behaviorIdentifier;
+        this.targetEntityIdentifier = targetEntityIdentifier;
     }
 
     // Serialization methods
@@ -105,15 +120,21 @@ public class PlaneParticleEffect implements ParticleEffect {
         buf.writeVarInt(this.targetColor);
         buf.writeBoolean(this.repeat);
         buf.writeVarInt(this.renderTypeOrdinal);
+
+        buf.writeString(behaviorIdentifier);
+        buf.writeInt(targetEntityIdentifier);
     }
 
     public String asString() {
-        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f %b %.2f %d %d %d %b %d",
+        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f %b %.2f %d %d %d %b %d %s %d",
                 Registries.PARTICLE_TYPE.getId(this.getType()),
                 this.yaw, this.pitch, this.roll, this.scale, this.isStatic,
                 this.gravityStrength, this.maxAge, this.color, this.targetColor,
                 this.repeat,
-                this.renderTypeOrdinal);
+                this.renderTypeOrdinal,
+                this.behaviorIdentifier,
+                this.targetEntityIdentifier
+        );
     }
 
     public ParticleType<PlaneParticleEffect> getType() {
@@ -132,5 +153,7 @@ public class PlaneParticleEffect implements ParticleEffect {
     public int getTargetColor() { return targetColor; }
     public boolean isRepeat() { return repeat; }
     public int getRenderTypeOrdinal() { return renderTypeOrdinal; }
+    public String getBehaviorIdentifier() { return behaviorIdentifier; }
+    public int getTargetEntityIdentifier() { return targetEntityIdentifier; }
 
 }

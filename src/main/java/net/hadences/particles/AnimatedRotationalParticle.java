@@ -2,9 +2,16 @@ package net.hadences.particles;
 
 import net.fabricmc.fabric.api.client.particle.v1.FabricSpriteProvider;
 import net.fabricmc.fabric.mixin.client.particle.ParticleManagerAccessor.SimpleSpriteProviderAccessor;
+import net.hadences.particles.behaviors.SpecterParticleBehavior;
+import net.hadences.particles.behaviors.SpecterParticleBehaviorRegistry;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.SpriteProvider;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -17,19 +24,28 @@ public class AnimatedRotationalParticle extends SpriteRotationalParticle {
     private boolean changesColor = false;
     private final boolean repeat;
     private int spriteIndex = 0;
+    private final SpecterParticleBehavior behavior;
 
     public AnimatedRotationalParticle(ClientWorld world, double x, double y, double z,
                                       double velocityX, double velocityY, double velocityZ,
                                       float rotationYaw, float rotationPitch, float rotationRoll,
                                       float scale, boolean isStatic, float gravityStrength,
                                       SpriteProvider spriteProvider, boolean repeat,
-                                      RenderType renderType) {
+                                      RenderType renderType, String behaviorIdentifier, int targetEntityID) {
         super(world, x, y, z, velocityX, velocityY, velocityZ, rotationYaw, rotationPitch, rotationRoll, scale, isStatic, renderType);
         this.spriteProvider = spriteProvider;
         this.repeat = repeat;
         this.velocityMultiplier = 0.91f;
         this.gravityStrength = gravityStrength;
+        this.behavior = SpecterParticleBehaviorRegistry.getBehavior(behaviorIdentifier);
         setSpriteForAge(spriteProvider);
+
+        Entity targetEntity = getTargetEntity(targetEntityID);
+
+        // call init
+        if(this.behavior != null){
+            this.behavior.init(this, targetEntity);
+        }
     }
 
     public void setColor(int rgbHex) {
@@ -67,6 +83,18 @@ public class AnimatedRotationalParticle extends SpriteRotationalParticle {
                 this.blue += (this.targetBlue - this.blue) * 0.2f;
             }
         }
+
+        if(this.behavior != null){
+            this.behavior.onTick(this);
+        }
+    }
+
+    @Contract(pure = true)
+    private @Nullable Entity getTargetEntity(int entityID) {
+        World world = MinecraftClient.getInstance().world;
+        if(world == null) return null;
+        // fetch entity
+        return world.getEntityById(entityID);
     }
 
     @SuppressWarnings("ALL")

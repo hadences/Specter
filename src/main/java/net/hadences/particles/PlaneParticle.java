@@ -15,9 +15,10 @@ public class PlaneParticle extends AnimatedRotationalParticle {
                          float rotationYaw, float rotationPitch, float rotationRoll,
                          float scale, boolean isStatic, float gravityStrength,
                          SpriteProvider spriteProvider, int maxAge, int color,
-                         int targetColor, boolean repeat, RenderType renderType) {
+                         int targetColor, boolean repeat, RenderType renderType,
+                         String behaviorIdentifier, int targetEntityID) {
         super(world, x, y, z, velocityX, velocityY, velocityZ, rotationYaw, rotationPitch, rotationRoll,
-                scale, isStatic, gravityStrength, spriteProvider, repeat, renderType);
+                scale, isStatic, gravityStrength, spriteProvider, repeat, renderType, behaviorIdentifier, targetEntityID);
 
         setColor(color);
         setTargetColor(targetColor);
@@ -48,10 +49,12 @@ public class PlaneParticle extends AnimatedRotationalParticle {
             int targetColor = planeParticleEffect != null ? planeParticleEffect.getTargetColor() : 0xffffff;
             boolean repeat = planeParticleEffect != null && planeParticleEffect.isRepeat();
             RenderType renderType = RenderType.values()[planeParticleEffect != null ? planeParticleEffect.getRenderTypeOrdinal() : 0];
+            String behaviorIdentifier = planeParticleEffect != null ? planeParticleEffect.getBehaviorIdentifier() : "";
+            int targetEntityIdentifier = planeParticleEffect != null ? planeParticleEffect.getTargetEntityIdentifier() : -1;
 
             return new PlaneParticle(clientWorld, x, y, z, velocityX, velocityY, velocityZ,
                     yaw, pitch, roll, scale, isStatic, gravityStrength,
-                    spriteProvider, maxAge, color, targetColor, repeat, renderType);
+                    spriteProvider, maxAge, color, targetColor, repeat, renderType, behaviorIdentifier, targetEntityIdentifier);
         }
     }
 }

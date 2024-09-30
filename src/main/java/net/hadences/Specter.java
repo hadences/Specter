@@ -5,6 +5,9 @@ import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.hadences.particles.RotationalParticle;
+import net.hadences.particles.behaviors.SpecterParticleBehaviorRegistry;
+import net.hadences.particles.behaviors.presets.MoveParticleBehavior;
+import net.hadences.particles.behaviors.presets.NoneParticleBehavior;
 import net.hadences.particles.types.SpecterParticleTypes;
 import net.hadences.particles.util.SpecterParticleUtils;
 import net.minecraft.server.command.CommandManager;
@@ -21,16 +24,28 @@ public class Specter implements ModInitializer {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+	public static final String NONE_BEHAVIOR = "none";
+	public static final String MOVE_BEHAVIOR = "move_behavior";
+
 	@Override
 	public void onInitialize() {
 		SpecterParticleTypes.init();
 		registerCommands();
+		registerParticleBehaviors();
 	}
 
 	private void registerCommands(){
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			dispatcher.register(CommandManager.literal("test").executes(this::testCommand));
 		});
+	}
+
+	/**
+	 * registers all particle behaviors into registry.
+	 */
+	private void registerParticleBehaviors(){
+		SpecterParticleBehaviorRegistry.register(MOVE_BEHAVIOR, new MoveParticleBehavior());
+		SpecterParticleBehaviorRegistry.register(NONE_BEHAVIOR, new NoneParticleBehavior());
 	}
 
 	private int testCommand(CommandContext<ServerCommandSource> context) {
@@ -60,7 +75,9 @@ public class Specter implements ModInitializer {
 				0xffffff,
 				0xffffff,
 				true,
-				RotationalParticle.RenderType.BILLBOARD
+				RotationalParticle.RenderType.BILLBOARD,
+				Specter.MOVE_BEHAVIOR,
+				player.getId()
 		);
 
 
