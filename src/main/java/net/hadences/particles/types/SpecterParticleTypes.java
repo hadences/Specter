@@ -1,8 +1,11 @@
 package net.hadences.particles.types;
 
 import com.mojang.serialization.Codec;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.hadences.Specter;
-import net.hadences.SpecterClient;
+import net.hadences.particles.PlaneParticle;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.registry.Registries;
@@ -27,6 +30,13 @@ public class SpecterParticleTypes {
 
     static {
         PLANE = register(new Identifier(Specter.MOD_ID, "plane"), true, PlaneParticleEffect.FACTORY, (type) -> PlaneParticleEffect.CODEC);
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static void registerParticleFactories(){
+        Specter.LOGGER.info("registering particle factories!");
+
+        ParticleFactoryRegistry.getInstance().register(SpecterParticleTypes.PLANE, PlaneParticle.Factory::new);
     }
 
 }
