@@ -3,12 +3,10 @@
   "package": "net.hadences.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ExampleMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-    "client.SpecterSimpleSpriteProvider"
   ]
 }
