@@ -3,9 +3,12 @@ package net.hadences.particles.types;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.hadences.Specter;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.registry.Registries;
@@ -14,9 +17,35 @@ import java.util.Locale;
 
 public class PlaneParticleEffect implements ParticleEffect {
 
+    public static PacketCodec<RegistryByteBuf, PlaneParticleEffect> getPacketCodec() { return PACKET_CODEC; }
+    public static MapCodec<PlaneParticleEffect> getCodec() { return (MapCodec<PlaneParticleEffect>) CODEC; }
 
-    // Define the Codec for serialization and deserialization
-    public static final Codec<PlaneParticleEffect> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
+    private static final PacketCodec<RegistryByteBuf, PlaneParticleEffect> PACKET_CODEC = new PacketCodec<>() {
+        @Override
+        public void encode(RegistryByteBuf buf, PlaneParticleEffect value) {
+            value.write(buf);
+        }
+
+        @Override
+        public PlaneParticleEffect decode(RegistryByteBuf buf) {
+            float yaw = buf.readFloat();
+            float pitch = buf.readFloat();
+            float roll = buf.readFloat();
+            float scale = buf.readFloat();
+            boolean isStatic = buf.readBoolean();
+            float gravityStrength = buf.readFloat();
+            int maxAge = buf.readVarInt();
+            int color = buf.readVarInt();
+            int targetColor = buf.readVarInt();
+            boolean repeat = buf.readBoolean();
+            int renderTypeOrdinal = buf.readVarInt();
+            String behaviorIdentifier = buf.readString();
+            int targetEntityIdentifier = buf.readVarInt();
+
+            return new PlaneParticleEffect(yaw, pitch, roll, scale, isStatic, gravityStrength, maxAge, color, targetColor, repeat, renderTypeOrdinal, behaviorIdentifier, targetEntityIdentifier);
+        }
+    };
+    private static final Codec<PlaneParticleEffect> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
             Codec.FLOAT.fieldOf("yaw").forGetter(PlaneParticleEffect::getYaw),
             Codec.FLOAT.fieldOf("pitch").forGetter(PlaneParticleEffect::getPitch),
             Codec.FLOAT.fieldOf("roll").forGetter(PlaneParticleEffect::getRoll),
@@ -30,50 +59,7 @@ public class PlaneParticleEffect implements ParticleEffect {
             Codec.INT.fieldOf("renderType").forGetter(PlaneParticleEffect::getRenderTypeOrdinal),
             Codec.STRING.fieldOf("behaviorIdentifier").forGetter(PlaneParticleEffect::getBehaviorIdentifier),
             Codec.INT.fieldOf("targetEntityIdentifier").forGetter(PlaneParticleEffect::getTargetEntityIdentifier)
-
     ).apply(instance, PlaneParticleEffect::new));
-
-    @SuppressWarnings("deprecation")
-    public static final ParticleEffect.Factory<PlaneParticleEffect> FACTORY = new ParticleEffect.Factory<>() {
-        public PlaneParticleEffect read(ParticleType<PlaneParticleEffect> particleType, StringReader stringReader) throws CommandSyntaxException {
-            stringReader.expect(' ');
-            float yaw = stringReader.readFloat();
-            float pitch = stringReader.readFloat();
-            float roll = stringReader.readFloat();
-            float scale = stringReader.readFloat();
-            boolean isStatic = stringReader.readBoolean();
-            float gravityStrength = stringReader.readFloat();
-            int maxAge = stringReader.readInt();
-            int color = stringReader.readInt();
-            int targetColor = stringReader.readInt();
-            boolean repeat = stringReader.readBoolean();
-            int renderTypeOrdinal = stringReader.readInt();
-            String behaviorIdentifier = stringReader.readString();
-            int targetEntityIdentifier = stringReader.readInt();
-
-            return new PlaneParticleEffect(yaw, pitch, roll, scale, isStatic, gravityStrength, maxAge, color, targetColor, repeat, renderTypeOrdinal, behaviorIdentifier, targetEntityIdentifier);
-        }
-
-        public PlaneParticleEffect read(ParticleType<PlaneParticleEffect> particleType, PacketByteBuf packetByteBuf) {
-            float yaw = packetByteBuf.readFloat();
-            float pitch = packetByteBuf.readFloat();
-            float roll = packetByteBuf.readFloat();
-            float scale = packetByteBuf.readFloat();
-            boolean isStatic = packetByteBuf.readBoolean();
-            float gravityStrength = packetByteBuf.readFloat();
-            int maxAge = packetByteBuf.readVarInt();
-            int color = packetByteBuf.readVarInt();
-            int targetColor = packetByteBuf.readVarInt();
-            boolean repeat = packetByteBuf.readBoolean();
-            int renderTypeOrdinal = packetByteBuf.readVarInt();
-            String behaviorIdentifier = packetByteBuf.readString();
-            int targetEntityIdentifier = packetByteBuf.readVarInt();
-
-            Specter.LOGGER.info("Client packet size: " + packetByteBuf.readerIndex());
-
-            return new PlaneParticleEffect(yaw, pitch, roll, scale, isStatic, gravityStrength, maxAge, color, targetColor, repeat, renderTypeOrdinal, behaviorIdentifier, targetEntityIdentifier);
-        }
-    };
 
     // Fields for the particle effect
     private final float yaw;

@@ -7,6 +7,7 @@ import net.minecraft.client.particle.ParticleTextureSheet;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -117,23 +118,25 @@ public abstract class RotationalParticle extends Particle {
         float particleColorG = green;
         float particleColorB = blue;
 
+        int color = ColorHelper.Argb.getArgb((int) (alpha * 255), (int) (particleColorR * 255), (int) (particleColorG * 255), (int) (particleColorB * 255));
+
         vertexConsumer.vertex(particleCorners[0].x(), particleCorners[0].y(), particleCorners[0].z())
-                .texture(maxU, maxV).color(particleColorR, particleColorG, particleColorB, 1.0f).light(brightness).next();
+                .texture(maxU, maxV).color(color).light(brightness);
         vertexConsumer.vertex(particleCorners[1].x(), particleCorners[1].y(), particleCorners[1].z())
-                .texture(maxU, minV).color(particleColorR, particleColorG, particleColorB, alpha).light(brightness).next();
+                .texture(maxU, minV).color(color).light(brightness);
         vertexConsumer.vertex(particleCorners[2].x(), particleCorners[2].y(), particleCorners[2].z())
-                .texture(minU, minV).color(particleColorR, particleColorG, particleColorB, alpha).light(brightness).next();
+                .texture(minU, minV).color(color).light(brightness);
         vertexConsumer.vertex(particleCorners[3].x(), particleCorners[3].y(), particleCorners[3].z())
-                .texture(minU, maxV).color(particleColorR, particleColorG, particleColorB, alpha).light(brightness).next();
+                .texture(minU, maxV).color(color).light(brightness);
 
         vertexConsumer.vertex(particleCorners[3].x(), particleCorners[3].y(), particleCorners[3].z())
-                .texture(minU, maxV).color(particleColorR, particleColorG, particleColorB, alpha).light(brightness).next();
+                .texture(minU, maxV).color(color).light(brightness);
         vertexConsumer.vertex(particleCorners[2].x(), particleCorners[2].y(), particleCorners[2].z())
-                .texture(minU, minV).color(particleColorR, particleColorG, particleColorB, alpha).light(brightness).next();
+                .texture(minU, minV).color(color).light(brightness);
         vertexConsumer.vertex(particleCorners[1].x(), particleCorners[1].y(), particleCorners[1].z())
-                .texture(maxU, minV).color(particleColorR, particleColorG, particleColorB, alpha).light(brightness).next();
+                .texture(maxU, minV).color(color).light(brightness);
         vertexConsumer.vertex(particleCorners[0].x(), particleCorners[0].y(), particleCorners[0].z())
-                .texture(maxU, maxV).color(particleColorR, particleColorG, particleColorB, 1.0f).light(brightness).next();
+                .texture(maxU, maxV).color(color).light(brightness);
     }
 
     public int getAge() {
