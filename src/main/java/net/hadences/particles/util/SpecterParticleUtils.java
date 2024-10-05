@@ -56,12 +56,21 @@ public class SpecterParticleUtils {
                 targetColor,
                 repeat,
                 renderType.ordinal(),
-                behaviorIdentifier.getNamespace()  + ":" + behaviorIdentifier.getPath(),
+                getBehaviorIdentifier(behaviorIdentifier),
                 targetEntityID
         );
 
         // Spawn the particles in the server world
         serverWorld.spawnParticles(particleEffect, x, y, z, count, dx, dy, dz, speed);
+    }
+
+    /**
+     * Converts the behavior identifier to a correct string format.
+     * @param identifier the identifier to convert
+     * @return the behavior identifier as a string
+     */
+    public static String getBehaviorIdentifier(Identifier identifier){
+        return identifier.getNamespace() + ":" + identifier.getPath();
     }
 
     public static void spawnPlaneParticle(ServerWorld serverWorld,
