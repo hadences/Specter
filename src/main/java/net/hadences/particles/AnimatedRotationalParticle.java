@@ -9,6 +9,7 @@ import net.minecraft.client.particle.SpriteProvider;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
@@ -37,7 +38,7 @@ public class AnimatedRotationalParticle extends SpriteRotationalParticle {
         this.repeat = repeat;
         this.velocityMultiplier = 0.91f;
         this.gravityStrength = gravityStrength;
-        this.behavior = SpecterParticleBehaviorRegistry.getBehavior(behaviorIdentifier);
+        this.behavior = SpecterParticleBehaviorRegistry.getBehavior(Identifier.of(behaviorIdentifier));
         setSpriteForAge(spriteProvider);
 
         Entity targetEntity = getTargetEntity(targetEntityID);

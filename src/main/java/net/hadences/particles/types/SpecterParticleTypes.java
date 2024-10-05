@@ -10,7 +10,6 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
-import net.minecraft.particle.ShriekParticleEffect;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -23,7 +22,7 @@ public class SpecterParticleTypes {
     public static void init () {
     }
 
-    private static <T extends ParticleEffect> ParticleType<T> register(Identifier identifier, boolean alwaysShow, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, PacketCodec<? super RegistryByteBuf, T>> packetCodecGetter) {
+    public static <T extends ParticleEffect> ParticleType<T> register(Identifier identifier, boolean alwaysShow, final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, PacketCodec<? super RegistryByteBuf, T>> packetCodecGetter) {
         return Registry.register(Registries.PARTICLE_TYPE, identifier, new ParticleType<T>(alwaysShow) {
             public MapCodec<T> getCodec() {
                 return codecGetter.apply(this);
@@ -43,8 +42,7 @@ public class SpecterParticleTypes {
 
     @Environment(EnvType.CLIENT)
     public static void registerParticleFactories(){
-        Specter.LOGGER.info("registering particle factories!");
-
+        Specter.LOGGER.info("Specter: registering particle factories!");
         ParticleFactoryRegistry.getInstance().register(SpecterParticleTypes.PLANE, PlaneParticle.Factory::new);
     }
 

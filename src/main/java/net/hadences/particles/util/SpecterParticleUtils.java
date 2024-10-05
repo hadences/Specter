@@ -5,6 +5,7 @@ import net.hadences.Specter;
 import net.hadences.particles.RotationalParticle;
 import net.hadences.particles.types.PlaneParticleEffect;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
 
 /**
  * Main Utility class for rendering particles.
@@ -40,7 +41,7 @@ public class SpecterParticleUtils {
                                           double x, double y, double z, int count, double dx, double dy, double dz, double speed,
                                           float yaw, float pitch, float roll, float scale, int maxAge, boolean isStatic,
                                           float gravityStrength, int color, int targetColor, boolean repeat, RotationalParticle.RenderType renderType,
-                                          String behaviorIdentifier, int targetEntityID) {
+                                          Identifier behaviorIdentifier, int targetEntityID) {
 
         // Create the PlaneParticleType instance
         PlaneParticleEffect particleEffect = new PlaneParticleEffect(
@@ -55,7 +56,7 @@ public class SpecterParticleUtils {
                 targetColor,
                 repeat,
                 renderType.ordinal(),
-                behaviorIdentifier,
+                behaviorIdentifier.getNamespace()  + ":" + behaviorIdentifier.getPath(),
                 targetEntityID
         );
 

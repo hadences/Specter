@@ -9,6 +9,7 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -147,6 +148,10 @@ public abstract class RotationalParticle extends Particle {
         setX(x);
         setY(y);
         setZ(z);
+    }
+
+    public Vec3d getPos(){
+        return new Vec3d(this.x, this.y, this.z);
     }
 
     public void setX(double x) {

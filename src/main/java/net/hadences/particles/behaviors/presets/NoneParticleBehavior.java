@@ -1,5 +1,6 @@
 package net.hadences.particles.behaviors.presets;
 
+import net.hadences.particles.AnimatedRotationalParticle;
 import net.hadences.particles.behaviors.SpecterParticleBehavior;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
