@@ -16,7 +16,9 @@ import java.util.Locale;
 public class PlaneParticleEffect implements ParticleEffect {
 
     public static PacketCodec<RegistryByteBuf, PlaneParticleEffect> getPacketCodec() { return PACKET_CODEC; }
-    public static MapCodec<PlaneParticleEffect> getCodec() { return (MapCodec<PlaneParticleEffect>) CODEC; }
+    public static MapCodec<PlaneParticleEffect> getCodec() {
+        return MapCodec.assumeMapUnsafe(CODEC);
+    }
 
     private static final PacketCodec<RegistryByteBuf, PlaneParticleEffect> PACKET_CODEC = new PacketCodec<>() {
         @Override

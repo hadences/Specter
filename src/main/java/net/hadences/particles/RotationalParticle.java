@@ -20,15 +20,15 @@ public abstract class RotationalParticle extends Particle {
         FREE
     }
 
-    private float scale;
-    private final Quaternionf rotation;
-    private float prevYaw;
-    private float prevPitch;
-    private float prevRoll;
-    private final boolean billboard;
-    private float yaw;
-    private float pitch;
-    private float roll;
+    protected float scale;
+    protected final Quaternionf rotation;
+    protected float prevYaw;
+    protected float prevPitch;
+    protected float prevRoll;
+    protected final boolean billboard;
+    protected float yaw;
+    protected float pitch;
+    protected float roll;
 
     public RotationalParticle(ClientWorld world, double x, double y, double z,
                               double velocityX, double velocityY, double velocityZ,
@@ -114,7 +114,7 @@ public abstract class RotationalParticle extends Particle {
         RenderSystem.defaultBlendFunc();
     }
 
-    private void renderQuad(VertexConsumer vertexConsumer, Vector3f[] particleCorners, float minU, float maxU, float minV, float maxV, int brightness) {
+    protected void renderQuad(VertexConsumer vertexConsumer, Vector3f[] particleCorners, float minU, float maxU, float minV, float maxV, int brightness) {
         float particleColorR = red;
         float particleColorG = green;
         float particleColorB = blue;
