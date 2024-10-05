@@ -1,5 +1,7 @@
 {
   "textures": [
-    "specter:cracked_nether_bricks"
+    "specter:plane1",
+    "specter:plane2",
+    "specter:plane3"
   ]
 }
