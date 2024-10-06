@@ -25,6 +25,7 @@ public class AnimatedRotationalParticle extends SpriteRotationalParticle {
     private boolean changesColor = false;
     private final boolean repeat;
     private int spriteIndex = 0;
+    private int delayTicks = 0;
     private final SpecterParticleBehavior behavior;
 
     public AnimatedRotationalParticle(ClientWorld world, double x, double y, double z,
@@ -32,8 +33,9 @@ public class AnimatedRotationalParticle extends SpriteRotationalParticle {
                                       float rotationYaw, float rotationPitch, float rotationRoll,
                                       float scale, boolean isStatic, float gravityStrength,
                                       SpriteProvider spriteProvider, boolean repeat,
-                                      RenderType renderType, String behaviorIdentifier, int targetEntityID) {
+                                      RenderType renderType, int delayTicks, String behaviorIdentifier, int targetEntityID) {
         super(world, x, y, z, velocityX, velocityY, velocityZ, rotationYaw, rotationPitch, rotationRoll, scale, isStatic, renderType);
+        this.delayTicks = delayTicks;
         this.spriteProvider = spriteProvider;
         this.repeat = repeat;
         this.velocityMultiplier = 0.91f;
@@ -65,6 +67,11 @@ public class AnimatedRotationalParticle extends SpriteRotationalParticle {
 
     @Override
     public void tick() {
+        if(this.delayTicks > 0){
+            this.delayTicks--;
+            return;
+        }
+
         super.tick();
 
         if (repeat) {

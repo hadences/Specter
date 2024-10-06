@@ -75,7 +75,7 @@ public class Specter implements ModInitializer {
 				true,
 				RotationalParticle.RenderType.FREE,
 				NONE_BEHAVIOR,
-				player.getId()
+				player.getId(),20
 		);
 
 
