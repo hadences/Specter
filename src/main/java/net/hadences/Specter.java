@@ -66,15 +66,15 @@ public class Specter implements ModInitializer {
 				-player.getYaw(),
 				player.getPitch(),
 				0.0f,
-				2.0f,
+				1.0f,
 				1000,
 				true,
 				0.0f,
 				0xffffff,
 				0xffffff,
 				true,
-				RotationalParticle.RenderType.BILLBOARD,
-				FOLLOW_EYE_BEHAVIOR,
+				RotationalParticle.RenderType.FREE,
+				NONE_BEHAVIOR,
 				player.getId()
 		);
 
