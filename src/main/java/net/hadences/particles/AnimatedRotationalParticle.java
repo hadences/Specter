@@ -127,4 +127,8 @@ public class AnimatedRotationalParticle extends SpriteRotationalParticle {
             this.setSprite(sprites.get(spriteIndex));
         }
     }
+
+    public void setAlpha(float alpha) {
+        this.alpha = alpha;
+    }
 }
