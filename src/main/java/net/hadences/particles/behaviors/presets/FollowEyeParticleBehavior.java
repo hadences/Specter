@@ -34,4 +34,13 @@ public class FollowEyeParticleBehavior implements SpecterParticleBehavior {
 
         particle.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
     }
+
+    @Override
+    public SpecterParticleBehavior clone() {
+        try {
+            return (FollowEyeParticleBehavior) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }
