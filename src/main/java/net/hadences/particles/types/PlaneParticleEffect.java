@@ -112,8 +112,6 @@ public class PlaneParticleEffect implements ParticleEffect {
 
         buf.writeString(behaviorIdentifier);
         buf.writeVarInt(targetEntityIdentifier);
-
-        Specter.LOGGER.info("Server packet size: " + buf.writerIndex());
     }
 
     public String asString() {
