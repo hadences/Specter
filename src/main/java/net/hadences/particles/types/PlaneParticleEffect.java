@@ -13,53 +13,7 @@ import net.minecraft.registry.Registries;
 
 import java.util.Locale;
 
-public class PlaneParticleEffect implements ParticleEffect {
-
-    public static PacketCodec<RegistryByteBuf, PlaneParticleEffect> getPacketCodec() { return PACKET_CODEC; }
-    public static MapCodec<PlaneParticleEffect> getCodec() {
-        return MapCodec.assumeMapUnsafe(CODEC);
-    }
-
-    private static final PacketCodec<RegistryByteBuf, PlaneParticleEffect> PACKET_CODEC = new PacketCodec<>() {
-        @Override
-        public void encode(RegistryByteBuf buf, PlaneParticleEffect value) {
-            value.write(buf);
-        }
-
-        @Override
-        public PlaneParticleEffect decode(RegistryByteBuf buf) {
-            float yaw = buf.readFloat();
-            float pitch = buf.readFloat();
-            float roll = buf.readFloat();
-            float scale = buf.readFloat();
-            boolean isStatic = buf.readBoolean();
-            float gravityStrength = buf.readFloat();
-            int maxAge = buf.readVarInt();
-            int color = buf.readVarInt();
-            int targetColor = buf.readVarInt();
-            boolean repeat = buf.readBoolean();
-            int renderTypeOrdinal = buf.readVarInt();
-            String behaviorIdentifier = buf.readString();
-            int targetEntityIdentifier = buf.readVarInt();
-
-            return new PlaneParticleEffect(yaw, pitch, roll, scale, isStatic, gravityStrength, maxAge, color, targetColor, repeat, renderTypeOrdinal, behaviorIdentifier, targetEntityIdentifier);
-        }
-    };
-    private static final Codec<PlaneParticleEffect> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
-            Codec.FLOAT.fieldOf("yaw").forGetter(PlaneParticleEffect::getYaw),
-            Codec.FLOAT.fieldOf("pitch").forGetter(PlaneParticleEffect::getPitch),
-            Codec.FLOAT.fieldOf("roll").forGetter(PlaneParticleEffect::getRoll),
-            Codec.FLOAT.fieldOf("scale").forGetter(PlaneParticleEffect::getScale),
-            Codec.BOOL.fieldOf("isStatic").forGetter(PlaneParticleEffect::isStatic),
-            Codec.FLOAT.fieldOf("gravityStrength").forGetter(PlaneParticleEffect::getGravityStrength),
-            Codec.INT.fieldOf("maxAge").forGetter(PlaneParticleEffect::getMaxAge),
-            Codec.INT.fieldOf("color").forGetter(PlaneParticleEffect::getColor),
-            Codec.INT.fieldOf("targetColor").forGetter(PlaneParticleEffect::getTargetColor),
-            Codec.BOOL.fieldOf("repeat").forGetter(PlaneParticleEffect::isRepeat),
-            Codec.INT.fieldOf("renderType").forGetter(PlaneParticleEffect::getRenderTypeOrdinal),
-            Codec.STRING.fieldOf("behaviorIdentifier").forGetter(PlaneParticleEffect::getBehaviorIdentifier),
-            Codec.INT.fieldOf("targetEntityIdentifier").forGetter(PlaneParticleEffect::getTargetEntityIdentifier)
-    ).apply(instance, PlaneParticleEffect::new));
+public abstract class PlaneParticleEffect implements ParticleEffect {
 
     // Fields for the particle effect
     private final float yaw;
@@ -126,9 +80,7 @@ public class PlaneParticleEffect implements ParticleEffect {
         );
     }
 
-    public ParticleType<PlaneParticleEffect> getType() {
-        return SpecterParticleTypes.PLANE;
-    }
+    public abstract ParticleType<? extends PlaneParticleEffect> getType();
 
     // Getter methods for each field
     public float getYaw() { return yaw; }

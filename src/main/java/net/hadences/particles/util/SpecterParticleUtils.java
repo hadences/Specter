@@ -3,7 +3,7 @@ package net.hadences.particles.util;
 
 import net.hadences.Specter;
 import net.hadences.particles.RotationalParticle;
-import net.hadences.particles.types.PlaneParticleEffect;
+import net.hadences.particles.types.TestParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 
@@ -44,7 +44,7 @@ public class SpecterParticleUtils {
                                           Identifier behaviorIdentifier, int targetEntityID) {
 
         // Create the PlaneParticleType instance
-        PlaneParticleEffect particleEffect = new PlaneParticleEffect(
+        TestParticleEffect particleEffect = new TestParticleEffect(
                 yaw,
                 pitch,
                 roll,

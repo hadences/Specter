@@ -17,7 +17,8 @@ import net.minecraft.util.Identifier;
 import java.util.function.Function;
 
 public class SpecterParticleTypes {
-    public static final ParticleType<PlaneParticleEffect> PLANE;
+    public static final ParticleType<PlaneParticleEffect> SPECTER_TEST;
+
 
     public static void init () {
     }
@@ -35,15 +36,15 @@ public class SpecterParticleTypes {
     }
 
     static {
-        PLANE = register(Identifier.of(Specter.MOD_ID, "plane"), true,
-                (type) -> PlaneParticleEffect.getCodec(),
-                (type) -> PlaneParticleEffect.getPacketCodec());
+        SPECTER_TEST = register(Identifier.of(Specter.MOD_ID, "specter_test"), true,
+                (type) -> TestParticleEffect.getCodec(),
+                (type) -> TestParticleEffect.getPacketCodec());
     }
 
     @Environment(EnvType.CLIENT)
     public static void registerParticleFactories(){
         Specter.LOGGER.info("Specter: registering particle factories!");
-        ParticleFactoryRegistry.getInstance().register(SpecterParticleTypes.PLANE, PlaneParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(SpecterParticleTypes.SPECTER_TEST, PlaneParticle.Factory::new);
     }
 
 }
