@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 public class AnimatedRotationalParticle extends SpriteRotationalParticle {
 
@@ -40,7 +41,7 @@ public class AnimatedRotationalParticle extends SpriteRotationalParticle {
         this.repeat = repeat;
         this.velocityMultiplier = 0.91f;
         this.gravityStrength = gravityStrength;
-        this.behavior = SpecterParticleBehaviorRegistry.getBehavior(Identifier.of(behaviorIdentifier));
+        this.behavior = Objects.requireNonNull(SpecterParticleBehaviorRegistry.getBehavior(Identifier.of(behaviorIdentifier))).clone();
         setSpriteForAge(spriteProvider);
 
         Entity targetEntity = getTargetEntity(targetEntityID);
