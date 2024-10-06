@@ -29,12 +29,13 @@ public abstract class PlaneParticleEffect implements ParticleEffect {
     private final int renderTypeOrdinal;
     private final String behaviorIdentifier;
     private final int targetEntityIdentifier;
+    private final int delayTicks;
 
     // Constructor
     public PlaneParticleEffect(float yaw, float pitch, float roll,
                                float scale, boolean isStatic, float gravityStrength,
                                int maxAge, int color, int targetColor,
-                               boolean repeat, int renderTypeOrdinal, String behaviorIdentifier, int targetEntityIdentifier) {
+                               boolean repeat, int renderTypeOrdinal, int delayTicks, String behaviorIdentifier, int targetEntityIdentifier) {
         this.yaw = yaw;
         this.pitch = pitch;
         this.roll = roll;
@@ -48,6 +49,7 @@ public abstract class PlaneParticleEffect implements ParticleEffect {
         this.renderTypeOrdinal = renderTypeOrdinal;
         this.behaviorIdentifier = behaviorIdentifier;
         this.targetEntityIdentifier = targetEntityIdentifier;
+        this.delayTicks = delayTicks;
     }
 
     // Serialization methods
@@ -63,20 +65,21 @@ public abstract class PlaneParticleEffect implements ParticleEffect {
         buf.writeVarInt(this.targetColor);
         buf.writeBoolean(this.repeat);
         buf.writeVarInt(this.renderTypeOrdinal);
-
+        buf.writeVarInt(delayTicks);
         buf.writeString(behaviorIdentifier);
         buf.writeVarInt(targetEntityIdentifier);
     }
 
     public String asString() {
-        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f %b %.2f %d %d %d %b %d %s %d",
+        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f %b %.2f %d %d %d %b %d %s %d %d",
                 Registries.PARTICLE_TYPE.getId(this.getType()),
                 this.yaw, this.pitch, this.roll, this.scale, this.isStatic,
                 this.gravityStrength, this.maxAge, this.color, this.targetColor,
                 this.repeat,
                 this.renderTypeOrdinal,
                 this.behaviorIdentifier,
-                this.targetEntityIdentifier
+                this.targetEntityIdentifier,
+                this.delayTicks
         );
     }
 
@@ -96,5 +99,6 @@ public abstract class PlaneParticleEffect implements ParticleEffect {
     public int getRenderTypeOrdinal() { return renderTypeOrdinal; }
     public String getBehaviorIdentifier() { return behaviorIdentifier; }
     public int getTargetEntityIdentifier() { return targetEntityIdentifier; }
+    public int getDelayTicks() { return delayTicks; }
 
 }

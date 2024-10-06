@@ -41,7 +41,7 @@ public class SpecterParticleUtils {
                                           double x, double y, double z, int count, double dx, double dy, double dz, double speed,
                                           float yaw, float pitch, float roll, float scale, int maxAge, boolean isStatic,
                                           float gravityStrength, int color, int targetColor, boolean repeat, RotationalParticle.RenderType renderType,
-                                          Identifier behaviorIdentifier, int targetEntityID) {
+                                          Identifier behaviorIdentifier, int targetEntityID, int delayTicks) {
 
         // Create the PlaneParticleType instance
         TestParticleEffect particleEffect = new TestParticleEffect(
@@ -56,6 +56,7 @@ public class SpecterParticleUtils {
                 targetColor,
                 repeat,
                 renderType.ordinal(),
+                delayTicks,
                 getBehaviorIdentifier(behaviorIdentifier),
                 targetEntityID
         );
@@ -78,7 +79,7 @@ public class SpecterParticleUtils {
                                           float yaw, float pitch, float roll, float scale, int maxAge, boolean isStatic,
                                           float gravityStrength, int color, int targetColor, boolean repeat, RotationalParticle.RenderType renderType) {
 
-        spawnPlaneParticle(serverWorld, x, y, z, count, dx, dy, dz, speed, yaw, pitch, roll, scale, maxAge, isStatic, gravityStrength, color, targetColor, repeat, renderType, Specter.NONE_BEHAVIOR, -1);
+        spawnPlaneParticle(serverWorld, x, y, z, count, dx, dy, dz, speed, yaw, pitch, roll, scale, maxAge, isStatic, gravityStrength, color, targetColor, repeat, renderType, Specter.NONE_BEHAVIOR, -1, 0);
     }
 }
 
