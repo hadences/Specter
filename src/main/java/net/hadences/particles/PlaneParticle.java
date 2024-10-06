@@ -27,7 +27,7 @@ public class PlaneParticle extends AnimatedRotationalParticle {
     }
 
     @Environment(EnvType.CLIENT)
-    public static class Factory implements ParticleFactory<PlaneParticleEffect> {
+    public static class Factory<T extends PlaneParticleEffect> implements ParticleFactory<T> {
         private final SpriteProvider spriteProvider;
 
         public Factory(SpriteProvider spriteProvider) {
@@ -35,7 +35,7 @@ public class PlaneParticle extends AnimatedRotationalParticle {
         }
 
         @Override
-        public Particle createParticle(PlaneParticleEffect planeParticleEffect, ClientWorld clientWorld,
+        public Particle createParticle(T planeParticleEffect, ClientWorld clientWorld,
                                        double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
 
             float yaw = planeParticleEffect != null ? planeParticleEffect.getYaw() : 0.0f;
