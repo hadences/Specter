@@ -61,8 +61,8 @@ public class PlaneConeParticle extends AnimatedRotationalParticle {
         Vector3f[] particleCorners = getQuadCorners();
         for (Vector3f corner : particleCorners) {
             corner.mul(particleSize);
-            corner.rotateX((float) Math.toRadians(-10));
-            corner.add(0f, 0f, 0f);
+            corner.rotateX((float) Math.toRadians(-20));
+            corner.add(0f, 0f, -particleSize);
             corner.rotate(this.rotation);
             corner.add(particlePosX, particlePosY, particlePosZ);
         }
@@ -72,8 +72,8 @@ public class PlaneConeParticle extends AnimatedRotationalParticle {
         particleCorners = getQuadCorners();
         for (Vector3f corner : particleCorners) {
             corner.mul(particleSize);
-            corner.rotateX((float) Math.toRadians(10));
-            corner.add(0f, 0f, 2f * particleSize);
+            corner.rotateX((float) Math.toRadians(20));
+            corner.add(0f, 0f, particleSize);
             corner.rotate(this.rotation);
             corner.add(particlePosX, particlePosY, particlePosZ);
         }
@@ -84,8 +84,8 @@ public class PlaneConeParticle extends AnimatedRotationalParticle {
         for (Vector3f corner : particleCorners) {
             corner.mul(particleSize);
             corner.rotateY((float) Math.toRadians(90));
-            corner.rotateZ((float) Math.toRadians(-10));
-            corner.add(particleSize, 0f, particleSize);
+            corner.rotateZ((float) Math.toRadians(-20));
+            corner.add(particleSize, 0f, 0f);
             corner.rotate(this.rotation);
             corner.add(particlePosX, particlePosY, particlePosZ);
         }
@@ -97,9 +97,9 @@ public class PlaneConeParticle extends AnimatedRotationalParticle {
             corner.mul(particleSize);
 
             corner.rotateY((float) Math.toRadians(90));
-            corner.rotateZ((float) Math.toRadians(10));
+            corner.rotateZ((float) Math.toRadians(20));
 
-            corner.add(-1f * particleSize, 0f, particleSize);
+            corner.add(-1f * particleSize, 0f, 0f);
             corner.rotate(this.rotation);
             corner.add(particlePosX, particlePosY, particlePosZ);
         }
