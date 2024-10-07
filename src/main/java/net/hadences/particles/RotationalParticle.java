@@ -83,9 +83,15 @@ public abstract class RotationalParticle extends Particle {
                 rotation.rotateZ(MathHelper.lerp(tickDelta, this.prevAngle, this.angle));
             }
         } else {
-            this.rotation.rotateY((float) Math.toRadians(particleYaw));
-            this.rotation.rotateX((float) Math.toRadians(particlePitch));
-            this.rotation.rotateZ((float) Math.toRadians(particleRoll));
+            Quaternionf quaternionf = new Quaternionf();
+            quaternionf.identity();
+            quaternionf.rotateY((float) Math.toRadians(particleYaw));
+            quaternionf.rotateX((float) Math.toRadians(particlePitch));
+            quaternionf.rotateZ((float) Math.toRadians(particleRoll));
+            this.rotation.mul(quaternionf);
+//            this.rotation.rotateY((float) Math.toRadians(particleYaw));
+//            this.rotation.rotateX((float) Math.toRadians(particlePitch));
+//            this.rotation.rotateZ((float) Math.toRadians(particleRoll));
         }
 
         Vector3f[] particleCorners = {
