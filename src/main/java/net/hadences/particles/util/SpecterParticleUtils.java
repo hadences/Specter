@@ -4,6 +4,7 @@ package net.hadences.particles.util;
 import net.hadences.Specter;
 import net.hadences.particles.RotationalParticle;
 import net.hadences.particles.types.TestParticleEffect;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 
@@ -62,6 +63,7 @@ public class SpecterParticleUtils {
         );
 
         // Spawn the particles in the server world
+//        serverWorld.spawnParticles(player, particleEffect, false, x, y, z, count, dx, dy, dz, speed);
         serverWorld.spawnParticles(particleEffect, x, y, z, count, dx, dy, dz, speed);
     }
 
