@@ -66,7 +66,7 @@ public class Specter implements ModInitializer {
 				-player.getYaw(),
 				player.getPitch()-90,
 				0.0f,
-				1.0f,
+				(float) Math.random() + 0.2f,
 				1000,
 				true,
 				0.0f,

@@ -5,8 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.hadences.Specter;
-import net.hadences.particles.PlaneConeParticle;
-import net.hadences.particles.PlaneParticle;
+import net.hadences.particles.CubeParticle;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.particle.ParticleEffect;
@@ -45,7 +44,7 @@ public class SpecterParticleTypes {
     @Environment(EnvType.CLIENT)
     public static void registerParticleFactories(){
         Specter.LOGGER.info("Specter: registering particle factories!");
-        ParticleFactoryRegistry.getInstance().register(SpecterParticleTypes.SPECTER_TEST, PlaneParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(SpecterParticleTypes.SPECTER_TEST, CubeParticle.Factory::new);
     }
 
 }
