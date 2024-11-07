@@ -71,6 +71,10 @@ jar {
 	}
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/specter.accesswidener")
+}
+
 // configure the maven publication
 publishing {
 	publications {
