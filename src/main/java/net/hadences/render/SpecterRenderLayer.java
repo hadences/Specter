@@ -15,7 +15,7 @@ public class SpecterRenderLayer extends RenderLayer {
             false,
             false,
             RenderLayer.MultiPhaseParameters.builder()
-                    .program(new RenderPhase.ShaderProgram(() -> SpecterClient.testShaderProgram))
+                    .program(new RenderPhase.ShaderProgram(() -> SpecterClient.getDefaultShaderProgram()))
                     .texture(RenderPhase.BLOCK_ATLAS_TEXTURE)
                     .transparency(RenderPhase.TRANSLUCENT_TRANSPARENCY)
                     .lightmap(RenderPhase.ENABLE_LIGHTMAP)

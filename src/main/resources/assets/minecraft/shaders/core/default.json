@@ -1,6 +1,6 @@
 {
-  "vertex": "test",
-  "fragment": "test",
+  "vertex": "default",
+  "fragment": "default",
   "samplers": [
     { "name": "Sampler0" },
     { "name": "Sampler2" }

@@ -18,7 +18,14 @@ out vec2 texCoord0;
 out vec4 vertexColor;
 
 void main() {
-    gl_Position = ProjMat * ModelViewMat * vec4(Position, 1.0);
+    vec4 position = ModelViewMat * vec4(Position, 1.0);
+
+    // make positions wavy
+//    position.z += sin(position.x * 5.0);
+
+    position = ProjMat * position;
+
+    gl_Position = position;
 
     vertexDistance = fog_distance(Position, FogShape);
     texCoord0 = UV0;

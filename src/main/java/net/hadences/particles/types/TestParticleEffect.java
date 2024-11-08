@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.particle.ParticleType;
+import net.minecraft.util.Identifier;
 
 public class TestParticleEffect extends PlaneParticleEffect{
 
@@ -36,8 +37,9 @@ public class TestParticleEffect extends PlaneParticleEffect{
             int delayTicks = buf.readVarInt();
             String behaviorIdentifier = buf.readString();
             int targetEntityIdentifier = buf.readVarInt();
+            Identifier shaderIdentifier = buf.readIdentifier();
 
-            return new TestParticleEffect(yaw, pitch, roll, scale, isStatic, gravityStrength, maxAge, color, targetColor, repeat, renderTypeOrdinal, delayTicks, behaviorIdentifier, targetEntityIdentifier);
+            return new TestParticleEffect(yaw, pitch, roll, scale, isStatic, gravityStrength, maxAge, color, targetColor, repeat, renderTypeOrdinal, delayTicks, behaviorIdentifier, targetEntityIdentifier, shaderIdentifier);
         }
     };
     private static final Codec<PlaneParticleEffect> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
@@ -54,11 +56,12 @@ public class TestParticleEffect extends PlaneParticleEffect{
             Codec.INT.fieldOf("renderType").forGetter(PlaneParticleEffect::getRenderTypeOrdinal),
             Codec.INT.fieldOf("delayTicks").forGetter(PlaneParticleEffect::getDelayTicks),
             Codec.STRING.fieldOf("behaviorIdentifier").forGetter(PlaneParticleEffect::getBehaviorIdentifier),
-            Codec.INT.fieldOf("targetEntityIdentifier").forGetter(PlaneParticleEffect::getTargetEntityIdentifier)
+            Codec.INT.fieldOf("targetEntityIdentifier").forGetter(PlaneParticleEffect::getTargetEntityIdentifier),
+            Identifier.CODEC.fieldOf("shaderIdentifier").forGetter(PlaneParticleEffect::getShaderIdentifier)
     ).apply(instance, TestParticleEffect::new));
 
-    public TestParticleEffect(float yaw, float pitch, float roll, float scale, boolean isStatic, float gravityStrength, int maxAge, int color, int targetColor, boolean repeat, int renderTypeOrdinal, int delayTicks, String behaviorIdentifier, int targetEntityIdentifier) {
-        super(yaw, pitch, roll, scale, isStatic, gravityStrength, maxAge, color, targetColor, repeat, renderTypeOrdinal, delayTicks, behaviorIdentifier, targetEntityIdentifier);
+    public TestParticleEffect(float yaw, float pitch, float roll, float scale, boolean isStatic, float gravityStrength, int maxAge, int color, int targetColor, boolean repeat, int renderTypeOrdinal, int delayTicks, String behaviorIdentifier, int targetEntityIdentifier, Identifier shaderIdentifier) {
+        super(yaw, pitch, roll, scale, isStatic, gravityStrength, maxAge, color, targetColor, repeat, renderTypeOrdinal, delayTicks, behaviorIdentifier, targetEntityIdentifier, shaderIdentifier);
     }
 
     @Override

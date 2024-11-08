@@ -20,11 +20,7 @@ void main() {
     if (color.a < 0.1) {
         discard;
     }
-//    fragColor = vec4(1.0, 0.0, 0.0, 1.0);
     vec2 uv = texCoord0;
     vec4 texColor = texture(Sampler0, uv);
-
-//    float strength = abs(distance(uv, vec2(0.25)));
-//    color = vec4(strength, strength, strength, 1.0);
     fragColor = linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);
 }

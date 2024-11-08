@@ -3,6 +3,7 @@ package net.hadences.particles;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.impl.client.particle.FabricSpriteProviderImpl;
+import net.hadences.Specter;
 import net.hadences.SpecterClient;
 import net.hadences.render.SpecterParticleSheets;
 import net.hadences.render.SpecterRenderLayer;
@@ -97,12 +98,6 @@ public abstract class SpriteRotationalParticle extends RotationalParticle {
 //        RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE);
         renderQuad(vertexConsumer, particleCorners, minU, maxU, minV, maxV, brightness);
 //        RenderSystem.defaultBlendFunc();
-    }
-
-    @Override
-    public ParticleTextureSheet getType() {
-//        return ParticleTextureSheet.PARTICLE_SHEET_TRANSLUCENT;
-        return SpecterParticleSheets.SPECTER_PARTICLE_SHEET;
     }
 
     @SuppressWarnings("ALL")

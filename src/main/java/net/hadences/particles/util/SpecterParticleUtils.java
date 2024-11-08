@@ -2,9 +2,9 @@ package net.hadences.particles.util;
 
 
 import net.hadences.Specter;
+import net.hadences.SpecterClient;
 import net.hadences.particles.RotationalParticle;
 import net.hadences.particles.types.TestParticleEffect;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 
@@ -42,7 +42,7 @@ public class SpecterParticleUtils {
                                           double x, double y, double z, int count, double dx, double dy, double dz, double speed,
                                           float yaw, float pitch, float roll, float scale, int maxAge, boolean isStatic,
                                           float gravityStrength, int color, int targetColor, boolean repeat, RotationalParticle.RenderType renderType,
-                                          Identifier behaviorIdentifier, int targetEntityID, int delayTicks) {
+                                          Identifier behaviorIdentifier, int targetEntityID, int delayTicks, Identifier shaderIdentifier) {
 
         // Create the PlaneParticleType instance
         TestParticleEffect particleEffect = new TestParticleEffect(
@@ -59,11 +59,9 @@ public class SpecterParticleUtils {
                 renderType.ordinal(),
                 delayTicks,
                 getBehaviorIdentifier(behaviorIdentifier),
-                targetEntityID
+                targetEntityID,
+                shaderIdentifier
         );
-
-        // Spawn the particles in the server world
-//        serverWorld.spawnParticles(player, particleEffect, false, x, y, z, count, dx, dy, dz, speed);
         serverWorld.spawnParticles(particleEffect, x, y, z, count, dx, dy, dz, speed);
     }
 
@@ -81,7 +79,7 @@ public class SpecterParticleUtils {
                                           float yaw, float pitch, float roll, float scale, int maxAge, boolean isStatic,
                                           float gravityStrength, int color, int targetColor, boolean repeat, RotationalParticle.RenderType renderType) {
 
-        spawnPlaneParticle(serverWorld, x, y, z, count, dx, dy, dz, speed, yaw, pitch, roll, scale, maxAge, isStatic, gravityStrength, color, targetColor, repeat, renderType, Specter.NONE_BEHAVIOR, -1, 0);
+        spawnPlaneParticle(serverWorld, x, y, z, count, dx, dy, dz, speed, yaw, pitch, roll, scale, maxAge, isStatic, gravityStrength, color, targetColor, repeat, renderType, Specter.NONE_BEHAVIOR, -1, 0, SpecterClient.defaultShaderProgram);
     }
 }
 

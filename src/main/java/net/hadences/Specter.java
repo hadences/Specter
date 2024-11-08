@@ -29,7 +29,7 @@ public class Specter implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		SpecterParticleTypes.init();
-		registerCommands();
+//		registerCommands();
 		registerParticleBehaviors();
 	}
 
@@ -75,7 +75,9 @@ public class Specter implements ModInitializer {
 				true,
 				RotationalParticle.RenderType.FREE,
 				NONE_BEHAVIOR,
-				player.getId(),20
+				player.getId(),
+				20,
+				SpecterClient.defaultShaderProgram
 		);
 
 
