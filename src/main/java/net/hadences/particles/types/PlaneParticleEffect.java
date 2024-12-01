@@ -1,9 +1,11 @@
 package net.hadences.particles.types;
 
+import net.hadences.render.SpecterShaderContext;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
 
 import java.util.Locale;
 
@@ -24,12 +26,15 @@ public abstract class PlaneParticleEffect implements ParticleEffect {
     private final String behaviorIdentifier;
     private final int targetEntityIdentifier;
     private final int delayTicks;
+    private final Identifier shaderIdentifier;
 
     // Constructor
     public PlaneParticleEffect(float yaw, float pitch, float roll,
                                float scale, boolean isStatic, float gravityStrength,
                                int maxAge, int color, int targetColor,
-                               boolean repeat, int renderTypeOrdinal, int delayTicks, String behaviorIdentifier, int targetEntityIdentifier) {
+                               boolean repeat, int renderTypeOrdinal, int delayTicks,
+                               String behaviorIdentifier, int targetEntityIdentifier,
+                               Identifier shaderIdentifier) {
         this.yaw = yaw;
         this.pitch = pitch;
         this.roll = roll;
@@ -44,6 +49,7 @@ public abstract class PlaneParticleEffect implements ParticleEffect {
         this.behaviorIdentifier = behaviorIdentifier;
         this.targetEntityIdentifier = targetEntityIdentifier;
         this.delayTicks = delayTicks;
+        this.shaderIdentifier = shaderIdentifier;
     }
 
     // Serialization methods
@@ -62,10 +68,11 @@ public abstract class PlaneParticleEffect implements ParticleEffect {
         buf.writeVarInt(delayTicks);
         buf.writeString(behaviorIdentifier);
         buf.writeVarInt(targetEntityIdentifier);
+        buf.writeIdentifier(shaderIdentifier);
     }
 
     public String asString() {
-        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f %b %.2f %d %d %d %b %d %s %d %d",
+        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f %b %.2f %d %d %d %b %d %s %d %d %s",
                 Registries.PARTICLE_TYPE.getId(this.getType()),
                 this.yaw, this.pitch, this.roll, this.scale, this.isStatic,
                 this.gravityStrength, this.maxAge, this.color, this.targetColor,
@@ -73,7 +80,8 @@ public abstract class PlaneParticleEffect implements ParticleEffect {
                 this.renderTypeOrdinal,
                 this.behaviorIdentifier,
                 this.targetEntityIdentifier,
-                this.delayTicks
+                this.delayTicks,
+                this.shaderIdentifier.toString()
         );
     }
 
@@ -94,5 +102,6 @@ public abstract class PlaneParticleEffect implements ParticleEffect {
     public String getBehaviorIdentifier() { return behaviorIdentifier; }
     public int getTargetEntityIdentifier() { return targetEntityIdentifier; }
     public int getDelayTicks() { return delayTicks; }
+    public Identifier getShaderIdentifier() { return shaderIdentifier; }
 
 }

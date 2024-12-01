@@ -7,6 +7,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFactory;
 import net.minecraft.client.particle.SpriteProvider;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.Identifier;
 
 public class PlaneParticle extends AnimatedRotationalParticle {
 
@@ -17,9 +18,9 @@ public class PlaneParticle extends AnimatedRotationalParticle {
                          SpriteProvider spriteProvider, int maxAge, int color,
                          int targetColor, boolean repeat, RenderType renderType,
                          int delayTicks,
-                         String behaviorIdentifier, int targetEntityID) {
+                         String behaviorIdentifier, int targetEntityID, Identifier shaderIdentifier) {
         super(world, x, y, z, velocityX, velocityY, velocityZ, rotationYaw, rotationPitch, rotationRoll,
-                scale, isStatic, gravityStrength, spriteProvider, repeat, renderType, delayTicks, behaviorIdentifier, targetEntityID);
+                scale, isStatic, gravityStrength, spriteProvider, repeat, renderType, delayTicks, behaviorIdentifier, targetEntityID, shaderIdentifier);
 
         setColor(color);
         setTargetColor(targetColor);
@@ -53,10 +54,11 @@ public class PlaneParticle extends AnimatedRotationalParticle {
             int delayTicks = planeParticleEffect != null ? planeParticleEffect.getDelayTicks() : 0;
             String behaviorIdentifier = planeParticleEffect != null ? planeParticleEffect.getBehaviorIdentifier() : "";
             int targetEntityIdentifier = planeParticleEffect != null ? planeParticleEffect.getTargetEntityIdentifier() : -1;
+            Identifier shaderIdentifier = planeParticleEffect != null ? planeParticleEffect.getShaderIdentifier() : Identifier.of("minecraft", "particles/default");
 
             return new PlaneParticle(clientWorld, x, y, z, velocityX, velocityY, velocityZ,
                     yaw, pitch, roll, scale, isStatic, gravityStrength,
-                    spriteProvider, maxAge, color, targetColor, repeat, renderType, delayTicks, behaviorIdentifier, targetEntityIdentifier);
+                    spriteProvider, maxAge, color, targetColor, repeat, renderType, delayTicks, behaviorIdentifier, targetEntityIdentifier, shaderIdentifier);
         }
     }
 }

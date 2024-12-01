@@ -1,18 +1,27 @@
 package net.hadences.particles;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.particle.v1.FabricSpriteProvider;
 import net.fabricmc.fabric.mixin.client.particle.ParticleManagerAccessor.SimpleSpriteProviderAccessor;
+import net.hadences.SpecterClient;
 import net.hadences.particles.behaviors.SpecterParticleBehavior;
 import net.hadences.particles.behaviors.SpecterParticleBehaviorRegistry;
+import net.hadences.render.SpecterParticleSheets;
+import net.hadences.render.SpecterShaderManager;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.particle.ParticleTextureSheet;
 import net.minecraft.client.particle.SpriteProvider;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,13 +37,15 @@ public class AnimatedRotationalParticle extends SpriteRotationalParticle {
     private int spriteIndex = 0;
     private int delayTicks = 0;
     private final SpecterParticleBehavior behavior;
+    private final Identifier shaderIdentifier;
 
     public AnimatedRotationalParticle(ClientWorld world, double x, double y, double z,
                                       double velocityX, double velocityY, double velocityZ,
                                       float rotationYaw, float rotationPitch, float rotationRoll,
                                       float scale, boolean isStatic, float gravityStrength,
                                       SpriteProvider spriteProvider, boolean repeat,
-                                      RenderType renderType, int delayTicks, String behaviorIdentifier, int targetEntityID) {
+                                      RenderType renderType, int delayTicks, String behaviorIdentifier, int targetEntityID,
+                                      Identifier shaderIdentifier) {
         super(world, x, y, z, velocityX, velocityY, velocityZ, rotationYaw, rotationPitch, rotationRoll, scale, isStatic, renderType);
         this.delayTicks = delayTicks;
         this.spriteProvider = spriteProvider;
@@ -42,6 +53,7 @@ public class AnimatedRotationalParticle extends SpriteRotationalParticle {
         this.velocityMultiplier = 0.91f;
         this.gravityStrength = gravityStrength;
         this.behavior = Objects.requireNonNull(SpecterParticleBehaviorRegistry.getBehavior(Identifier.of(behaviorIdentifier))).clone();
+        this.shaderIdentifier = shaderIdentifier;
         setSpriteForAge(spriteProvider);
 
         Entity targetEntity = getTargetEntity(targetEntityID);
@@ -50,6 +62,59 @@ public class AnimatedRotationalParticle extends SpriteRotationalParticle {
         if(this.behavior != null){
             this.behavior.init(this, targetEntity);
         }
+    }
+
+    @Override
+    public void buildGeometry(VertexConsumer vertexConsumer, Camera camera, float tickDelta) {
+        if (camera == null || vertexConsumer == null) return;
+
+        var cameraPosition = camera.getPos();
+        float particlePosX = (float) (MathHelper.lerp(tickDelta, prevPosX, x) - cameraPosition.x);
+        float particlePosY = (float) (MathHelper.lerp(tickDelta, prevPosY, y) - cameraPosition.y);
+        float particlePosZ = (float) (MathHelper.lerp(tickDelta, prevPosZ, z) - cameraPosition.z);
+
+        float particleYaw = MathHelper.lerp(tickDelta, prevYaw, yaw);
+        float particlePitch = MathHelper.lerp(tickDelta, prevPitch, pitch);
+        float particleRoll = MathHelper.lerp(tickDelta, prevRoll, roll);
+
+        this.rotation.identity();
+
+        if (billboard) {
+            getRotator().setRotation(this.rotation, camera, tickDelta);
+            if (this.angle != 0.0f) {
+                rotation.rotateZ(MathHelper.lerp(tickDelta, this.prevAngle, this.angle));
+            }
+        } else {
+            this.rotation.rotateY((float) Math.toRadians(particleYaw));
+            this.rotation.rotateX((float) Math.toRadians(particlePitch));
+            this.rotation.rotateZ((float) Math.toRadians(particleRoll));
+        }
+
+        Vector3f[] particleCorners = {
+                new Vector3f(-1.0f, -1.0f, 0.0f),
+                new Vector3f(-1.0f, 1.0f, 0.0f),
+                new Vector3f(1.0f, 1.0f, 0.0f),
+                new Vector3f(1.0f, -1.0f, 0.0f)
+        };
+
+        float particleSize = getSize(tickDelta);
+
+        // rotate and scale the corners
+        for (Vector3f corner : particleCorners) {
+            corner.rotate(this.rotation);
+            corner.mul(particleSize);
+            corner.add(particlePosX, particlePosY, particlePosZ);
+        }
+        // set the custom shader based on the shader identifier
+        RenderSystem.setShader(() -> SpecterShaderManager.getShaderProgram(shaderIdentifier));
+        renderQuad(vertexConsumer, particleCorners, getMinU(), getMaxU(), getMinV(), getMaxV(), getBrightness(tickDelta));
+
+    }
+
+    @Override
+    public ParticleTextureSheet getType() {
+        ParticleTextureSheet sheet = SpecterParticleSheets.getParticleTextureSheetMap().get(this.shaderIdentifier);
+        return sheet != null ? sheet : SpecterParticleSheets.SPECTER_PARTICLE_SHEET;
     }
 
     public void setColor(int rgbHex) {

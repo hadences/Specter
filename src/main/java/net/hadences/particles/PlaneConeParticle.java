@@ -9,6 +9,7 @@ import net.minecraft.client.particle.SpriteProvider;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import org.joml.Vector3f;
 
@@ -20,9 +21,9 @@ public class PlaneConeParticle extends AnimatedRotationalParticle {
                              float scale, boolean isStatic, float gravityStrength,
                              SpriteProvider spriteProvider, int maxAge, int color,
                              int targetColor, boolean repeat, RenderType renderType, int delayTicks,
-                             String behaviorIdentifier, int targetEntityID) {
+                             String behaviorIdentifier, int targetEntityID, Identifier shaderIdentifier) {
         super(world, x, y, z, velocityX, velocityY, velocityZ, rotationYaw, rotationPitch, rotationRoll,
-                scale, isStatic, gravityStrength, spriteProvider, repeat, renderType,  delayTicks, behaviorIdentifier, targetEntityID);
+                scale, isStatic, gravityStrength, spriteProvider, repeat, renderType,  delayTicks, behaviorIdentifier, targetEntityID, shaderIdentifier);
 
         setColor(color);
         setTargetColor(targetColor);
@@ -145,10 +146,11 @@ public class PlaneConeParticle extends AnimatedRotationalParticle {
             int delayTicks = planeParticleEffect != null ? planeParticleEffect.getDelayTicks() : 0;
             String behaviorIdentifier = planeParticleEffect != null ? planeParticleEffect.getBehaviorIdentifier() : "";
             int targetEntityIdentifier = planeParticleEffect != null ? planeParticleEffect.getTargetEntityIdentifier() : -1;
+            Identifier shaderIdentifier = planeParticleEffect != null ? planeParticleEffect.getShaderIdentifier() : Identifier.of("minecraft", "particles/default");
 
             return new PlaneConeParticle(clientWorld, x, y, z, velocityX, velocityY, velocityZ,
                     yaw, pitch, roll, scale, isStatic, gravityStrength,
-                    spriteProvider, maxAge, color, targetColor, repeat, renderType, delayTicks, behaviorIdentifier, targetEntityIdentifier);
+                    spriteProvider, maxAge, color, targetColor, repeat, renderType, delayTicks, behaviorIdentifier, targetEntityIdentifier, shaderIdentifier);
         }
     }
 }

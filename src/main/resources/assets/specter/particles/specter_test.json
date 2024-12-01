@@ -1,5 +1,7 @@
 {
   "textures": [
-    "specter:plane1"
+    "specter:plane1",
+    "specter:plane2",
+    "specter:plane3"
   ]
 }
