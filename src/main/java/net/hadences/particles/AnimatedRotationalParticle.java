@@ -3,19 +3,15 @@ package net.hadences.particles;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.particle.v1.FabricSpriteProvider;
 import net.fabricmc.fabric.mixin.client.particle.ParticleManagerAccessor.SimpleSpriteProviderAccessor;
-import net.hadences.Specter;
 import net.hadences.SpecterClient;
 import net.hadences.particles.behaviors.SpecterParticleBehavior;
 import net.hadences.particles.behaviors.SpecterParticleBehaviorRegistry;
 import net.hadences.render.SpecterParticleSheets;
-import net.hadences.render.SpecterShaderContext;
 import net.hadences.render.SpecterShaderManager;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.particle.ParticleTextureSheet;
 import net.minecraft.client.particle.SpriteProvider;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.world.ClientWorld;
@@ -25,7 +21,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -59,7 +54,6 @@ public class AnimatedRotationalParticle extends SpriteRotationalParticle {
         this.gravityStrength = gravityStrength;
         this.behavior = Objects.requireNonNull(SpecterParticleBehaviorRegistry.getBehavior(Identifier.of(behaviorIdentifier))).clone();
         this.shaderIdentifier = shaderIdentifier;
-
         setSpriteForAge(spriteProvider);
 
         Entity targetEntity = getTargetEntity(targetEntityID);
@@ -91,12 +85,9 @@ public class AnimatedRotationalParticle extends SpriteRotationalParticle {
                 rotation.rotateZ(MathHelper.lerp(tickDelta, this.prevAngle, this.angle));
             }
         } else {
-            Quaternionf quaternionf = new Quaternionf();
-            quaternionf.identity();
-            quaternionf.rotateY((float) Math.toRadians(particleYaw));
-            quaternionf.rotateX((float) Math.toRadians(particlePitch));
-            quaternionf.rotateZ((float) Math.toRadians(particleRoll));
-            this.rotation.mul(quaternionf);
+            this.rotation.rotateY((float) Math.toRadians(particleYaw));
+            this.rotation.rotateX((float) Math.toRadians(particlePitch));
+            this.rotation.rotateZ((float) Math.toRadians(particleRoll));
         }
 
         Vector3f[] particleCorners = {
@@ -108,32 +99,22 @@ public class AnimatedRotationalParticle extends SpriteRotationalParticle {
 
         float particleSize = getSize(tickDelta);
 
+        // rotate and scale the corners
         for (Vector3f corner : particleCorners) {
             corner.rotate(this.rotation);
             corner.mul(particleSize);
             corner.add(particlePosX, particlePosY, particlePosZ);
         }
+        // set the custom shader based on the shader identifier
+        RenderSystem.setShader(() -> SpecterShaderManager.getShaderProgram(shaderIdentifier));
+        renderQuad(vertexConsumer, particleCorners, getMinU(), getMaxU(), getMinV(), getMaxV(), getBrightness(tickDelta));
 
-        float minU = getMinU();
-        float maxU = getMaxU();
-        float minV = getMinV();
-        float maxV = getMaxV();
-        int brightness = getBrightness(tickDelta);
-
-        RenderSystem.setShader(() -> {
-            ShaderProgram shaderProgram = SpecterShaderManager.getShaderProgram(shaderIdentifier);
-            if (shaderProgram == null) {
-                Specter.LOGGER.warn("Custom shader program is null, using default particle shader.");
-                return GameRenderer.getParticleProgram();
-            }
-            return shaderProgram;
-        });
-        renderQuad(vertexConsumer, particleCorners, minU, maxU, minV, maxV, brightness);
     }
 
     @Override
     public ParticleTextureSheet getType() {
-        return SpecterParticleSheets.SPECTER_PARTICLE_SHEET;
+        ParticleTextureSheet sheet = SpecterParticleSheets.getParticleTextureSheetMap().get(this.shaderIdentifier);
+        return sheet != null ? sheet : SpecterParticleSheets.SPECTER_PARTICLE_SHEET;
     }
 
     public void setColor(int rgbHex) {

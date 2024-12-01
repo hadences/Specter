@@ -77,7 +77,7 @@ public class Specter implements ModInitializer {
 				NONE_BEHAVIOR,
 				player.getId(),
 				20,
-				SpecterClient.defaultShaderProgram
+				(SpecterClient.specterShaderProgram)
 		);
 
 

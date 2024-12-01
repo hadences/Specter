@@ -1,5 +1,6 @@
 package net.hadences.particles.types;
 
+import net.hadences.render.SpecterShaderContext;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;

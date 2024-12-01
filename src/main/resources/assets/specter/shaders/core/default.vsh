@@ -7,7 +7,7 @@ in vec2 UV0;
 in vec4 Color;
 in ivec2 UV2;
 
-uniform sampler2D Sampler0;
+uniform sampler2D Sampler2;
 
 uniform mat4 ModelViewMat;
 uniform mat4 ProjMat;
@@ -29,5 +29,5 @@ void main() {
 
     vertexDistance = fog_distance(Position, FogShape);
     texCoord0 = UV0;
-    vertexColor = Color * texelFetch(Sampler0, UV2 / 16, 0);
+    vertexColor = Color * texelFetch(Sampler2, UV2 / 16, 0);
 }

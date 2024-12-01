@@ -4,3 +4,4 @@ accessible field net/minecraft/client/particle/ParticleManager PARTICLE_TEXTURE_
 mutable field net/minecraft/client/particle/ParticleManager PARTICLE_TEXTURE_SHEETS Ljava/util/List;
 
 accessible method net/minecraft/client/render/GameRenderer loadPrograms (Lnet/minecraft/resource/ResourceFactory;)V
+
