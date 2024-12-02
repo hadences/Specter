@@ -29,7 +29,7 @@ public class Specter implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		SpecterParticleTypes.init();
-//		registerCommands();
+		registerCommands();
 		registerParticleBehaviors();
 	}
 

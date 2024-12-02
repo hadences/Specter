@@ -42,6 +42,7 @@ public class SpecterParticleSheets {
         public BufferBuilder begin(Tessellator tessellator, TextureManager textureManager) {
             RenderSystem.depthMask(true);
 
+            RenderSystem.setShader(GameRenderer::getParticleProgram);
 //            RenderSystem.setShader(() -> SpecterShaderManager.getShaderProgram(SpecterClient.specterShaderProgram));
             RenderSystem.setShaderTexture(0, SpriteAtlasTexture.PARTICLE_ATLAS_TEXTURE);
             RenderSystem.enableBlend();
