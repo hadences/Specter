@@ -106,7 +106,7 @@ public class AnimatedRotationalParticle extends SpriteRotationalParticle {
             corner.add(particlePosX, particlePosY, particlePosZ);
         }
         // set the custom shader based on the shader identifier
-        RenderSystem.setShader(() -> SpecterShaderManager.getShaderProgram(shaderIdentifier));
+//        RenderSystem.setShader(() -> SpecterShaderManager.getShaderProgram(shaderIdentifier));
         renderQuad(vertexConsumer, particleCorners, getMinU(), getMaxU(), getMinV(), getMaxV(), getBrightness(tickDelta));
 
     }
