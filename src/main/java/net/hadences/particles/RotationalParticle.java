@@ -222,7 +222,7 @@ public abstract class RotationalParticle extends Particle {
 
     @Override
     public Particle scale(float scale) {
-        this.scale *= scale;
+        this.scale = scale;
         return super.scale(scale);
     }
 
